@@ -31,3 +31,24 @@ search_results.each do |freelanser|
 	freelancers_list_and_info[freelanser_list.shift]=freelanser_list
 end
 
+
+contains_search_keywords = freelancers_list_and_info.values.map do |freelanse_info|
+	freelanse_info.include?(categories.first)
+end
+
+random_freelanser = search_results[rand(1..10)].click
+
+wait.until { driver.find_element(class: 'media') }
+freelanse_name = driver.find_element(class: 'media').text.split("\n").first
+freelancers_list_and_info.keys.include?(freelanse_name)
+
+
+freelanse_summary = driver.find_element(class: 'fe-job-title').text
+freelancers_list_and_info[freelanse_name].include?(freelanse_summary)
+
+
+freelanse_sallary = driver.find_elements(class: 'list-inline').map{|el| el.text}.compact.reject(&:empty?).first.split("\n").first
+freelancers_list_and_info[freelanse_name].include?(freelanse_sallary)
+
+freelanse_description = driver.find_element(class: 'cfe-overview').text
+freelancers_list_and_info[freelanse_name][6].split(' ').first(3).join(' ').include?(freelanse_description.split(' ').first(3).join(' '))
